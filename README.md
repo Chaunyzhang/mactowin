@@ -50,7 +50,8 @@ First launch is blocked by Gatekeeper (unsigned open-source build). Allow it onc
 > **系统设置 → 隐私与安全性 → 最下方「仍要打开」**
 > **System Settings → Privacy & Security → "Open Anyway"**
 
-或一行命令 · or one command:
+已经拖进「应用程序」后，也可以用一行命令代替上面的手动放行（macOS 自带命令，无需安装任何东西）：
+Already dragged into Applications? You can skip the manual step with this built-in macOS command instead:
 
 ```bash
 xattr -dr com.apple.quarantine /Applications/mactowin.app
