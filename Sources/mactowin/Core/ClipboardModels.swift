@@ -9,9 +9,15 @@ enum ClipboardContent: Equatable {
 }
 
 struct ClipboardItem: Identifiable, Equatable {
-    let id = UUID()
-    let date = Date()
+    let id: UUID
+    let date: Date
     let content: ClipboardContent
+
+    init(id: UUID = UUID(), date: Date = Date(), content: ClipboardContent) {
+        self.id = id
+        self.date = date
+        self.content = content
+    }
 
     static func == (lhs: ClipboardItem, rhs: ClipboardItem) -> Bool {
         lhs.id == rhs.id
@@ -71,7 +77,16 @@ enum ClipboardReader {
     }
 }
 
-// MARK: - 历史记录存储
+// MARK: - 历史记录存储（持久化到 ~/Library/Application Support/mactowin/history）
+
+struct PersistedClipboardItem: Codable {
+    let id: UUID
+    let date: Date
+    let kind: String          // text / image / files
+    let text: String?
+    let imageFile: String?
+    let files: [String]?
+}
 
 final class ClipboardHistoryStore: ObservableObject {
     static let shared = ClipboardHistoryStore()
@@ -80,6 +95,17 @@ final class ClipboardHistoryStore: ObservableObject {
 
     var limit: Int { SettingsStore.shared.historyLimit }
 
+    private let storageDir: URL
+    private var imagesDir: URL { storageDir.appendingPathComponent("images") }
+    private var metadataURL: URL { storageDir.appendingPathComponent("history.json") }
+
+    init(storageDir: URL? = nil) {
+        self.storageDir = storageDir ?? FileManager.default
+            .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("mactowin/history")
+        load()
+    }
+
     func add(_ content: ClipboardContent) {
         // 去重：相同内容移到最前
         items.removeAll { $0.content == content }
@@ -87,10 +113,68 @@ final class ClipboardHistoryStore: ObservableObject {
         if items.count > limit {
             items = Array(items.prefix(limit))
         }
+        save()
     }
 
     func clear() {
         items.removeAll()
+        try? FileManager.default.removeItem(at: imagesDir)
+        save()
+    }
+
+    // MARK: 持久化
+
+    private func save() {
+        let fm = FileManager.default
+        try? fm.createDirectory(at: imagesDir, withIntermediateDirectories: true)
+
+        var persisted: [PersistedClipboardItem] = []
+        for item in items {
+            switch item.content {
+            case .text(let s):
+                persisted.append(PersistedClipboardItem(id: item.id, date: item.date, kind: "text", text: s, imageFile: nil, files: nil))
+            case .image(let data):
+                let name = item.id.uuidString + ".png"
+                try? data.write(to: imagesDir.appendingPathComponent(name))
+                persisted.append(PersistedClipboardItem(id: item.id, date: item.date, kind: "image", text: nil, imageFile: name, files: nil))
+            case .files(let urls):
+                persisted.append(PersistedClipboardItem(id: item.id, date: item.date, kind: "files", text: nil, imageFile: nil, files: urls.map { $0.path }))
+            }
+        }
+        if let data = try? JSONEncoder().encode(persisted) {
+            try? data.write(to: metadataURL, options: .atomic)
+        }
+
+        // 清理不再被引用的图片文件
+        let referenced = Set(persisted.compactMap { $0.imageFile })
+        if let onDisk = try? fm.contentsOfDirectory(atPath: imagesDir.path) {
+            for file in onDisk where !referenced.contains(file) {
+                try? fm.removeItem(at: imagesDir.appendingPathComponent(file))
+            }
+        }
+    }
+
+    private func load() {
+        guard let data = try? Data(contentsOf: metadataURL),
+              let persisted = try? JSONDecoder().decode([PersistedClipboardItem].self, from: data) else { return }
+        items = persisted.compactMap { p in
+            let content: ClipboardContent
+            switch p.kind {
+            case "text":
+                guard let t = p.text else { return nil }
+                content = .text(t)
+            case "image":
+                guard let f = p.imageFile,
+                      let d = try? Data(contentsOf: imagesDir.appendingPathComponent(f)) else { return nil }
+                content = .image(d)
+            case "files":
+                guard let fs = p.files else { return nil }
+                content = .files(fs.map { URL(fileURLWithPath: $0) })
+            default:
+                return nil
+            }
+            return ClipboardItem(id: p.id, date: p.date, content: content)
+        }
     }
 
     func copyToPasteboard(_ item: ClipboardItem) {

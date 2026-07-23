@@ -43,16 +43,24 @@ final class FileNamingTests: XCTestCase {
 }
 
 final class ClipboardHistoryStoreTests: XCTestCase {
-    override func setUp() {
-        ClipboardHistoryStore.shared.clear()
+    private var tempDir: URL!
+
+    override func setUpWithError() throws {
+        tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("mactowin-history-tests-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
     }
 
-    override func tearDown() {
-        ClipboardHistoryStore.shared.clear()
+    override func tearDownWithError() throws {
+        try? FileManager.default.removeItem(at: tempDir)
+    }
+
+    private func makeStore() -> ClipboardHistoryStore {
+        ClipboardHistoryStore(storageDir: tempDir)
     }
 
     func testAddInsertsAtFront() {
-        let store = ClipboardHistoryStore.shared
+        let store = makeStore()
         store.add(.text("第一条"))
         store.add(.text("第二条"))
         XCTAssertEqual(store.items.count, 2)
@@ -60,7 +68,7 @@ final class ClipboardHistoryStoreTests: XCTestCase {
     }
 
     func testDuplicateMovesToFront() {
-        let store = ClipboardHistoryStore.shared
+        let store = makeStore()
         store.add(.text("A"))
         store.add(.text("B"))
         store.add(.text("A"))
@@ -70,7 +78,7 @@ final class ClipboardHistoryStoreTests: XCTestCase {
     }
 
     func testLimitIsRespected() {
-        let store = ClipboardHistoryStore.shared
+        let store = makeStore()
         let settings = SettingsStore.shared
         let old = settings.historyLimit
         settings.historyLimit = 5
@@ -84,10 +92,33 @@ final class ClipboardHistoryStoreTests: XCTestCase {
     }
 
     func testDifferentContentTypesAreDistinct() {
-        let store = ClipboardHistoryStore.shared
+        let store = makeStore()
         store.add(.text("A"))
         store.add(.image(Data([1, 2, 3])))
         store.add(.files([URL(fileURLWithPath: "/tmp/x")]))
         XCTAssertEqual(store.items.count, 3)
+    }
+
+    func testPersistenceRoundtrip() {
+        let store1 = makeStore()
+        store1.add(.text("持久化的文本"))
+        store1.add(.image(Data([9, 8, 7])))
+        store1.add(.files([URL(fileURLWithPath: "/tmp/a.txt")]))
+
+        // 新实例模拟重启后加载
+        let store2 = makeStore()
+        XCTAssertEqual(store2.items.count, 3)
+        XCTAssertEqual(store2.items[0].content, .files([URL(fileURLWithPath: "/tmp/a.txt")]))
+        XCTAssertEqual(store2.items[1].content, .image(Data([9, 8, 7])))
+        XCTAssertEqual(store2.items[2].content, .text("持久化的文本"))
+    }
+
+    func testClearRemovesPersistedData() {
+        let store1 = makeStore()
+        store1.add(.image(Data([1, 2, 3])))
+        store1.clear()
+
+        let store2 = makeStore()
+        XCTAssertTrue(store2.items.isEmpty)
     }
 }
