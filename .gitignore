@@ -1,0 +1,12 @@
+# Swift / SPM
+.build/
+.swiftpm/
+*.xcodeproj
+xcuserdata/
+
+# 构建产物
+dist/
+
+# 系统
+.DS_Store
+*.log

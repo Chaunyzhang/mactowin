@@ -1,0 +1,105 @@
+/* mactowin English localization
+   键 = 中文字面量（开发语言），系统语言为英文时自动生效 */
+
+// MARK: 菜单栏
+"启用 mactowin" = "Enable mactowin";
+"功能开关" = "Feature Toggles";
+"设置…" = "Settings…";
+"退出 mactowin" = "Quit mactowin";
+"复制验证码 %@" = "Copy Code %@";
+"图片粘贴保存" = "Save Clipboard Image";
+"剪贴板历史" = "Clipboard History";
+"复制当前位置路径" = "Copy Current Location Path";
+"新建文本文件" = "New Text File";
+"验证码自动复制" = "Auto-Copy SMS Codes";
+"剪切粘贴（⌘X/⌘V）" = "Cut & Paste (⌘X/⌘V)";
+"⌫ 返回上级" = "⌫ Go Up";
+"Enter 打开 / F2 改名" = "Enter to Open / F2 to Rename";
+"fn+Delete 删除文件" = "fn+Delete to Delete";
+"⌘L 地址栏" = "⌘L Address Bar";
+"⌥Enter 显示简介" = "⌥Enter Get Info";
+"Home/End 行首行尾" = "Home/End Line Start/End";
+"Ctrl 兼容" = "Ctrl Compatibility";
+"窗口分屏（⌃⌥方向键）" = "Window Snapping (⌃⌥Arrows)";
+"鼠标滚轮 Windows 方向" = "Windows-Style Scrolling";
+"保存剪贴板图片　%@" = "Save Clipboard Image　%@";
+"剪贴板历史　%@" = "Clipboard History　%@";
+
+// MARK: 设置 - 通用
+"通用" = "General";
+"功能" = "Features";
+"访达" = "Finder";
+"键盘鼠标" = "Keyboard & Mouse";
+"窗口" = "Window";
+"权限" = "Permissions";
+"辅助功能：已授权" = "Accessibility: Granted";
+"辅助功能：未授权" = "Accessibility: Not Granted";
+"打开系统设置授权" = "Open System Settings";
+"按键映射、窗口管理、鼠标滚轮反向需要此权限；授权后立即生效，无需重启。" = "Required for key mapping, window management and scroll reversal. Takes effect immediately, no restart needed.";
+"登录时启动" = "Launch at Login";
+"关于" = "About";
+"mactowin" = "mactowin";
+"Windows 迁移者的一站式兼容层。重度窗口切换用户建议搭配免费开源的 AltTab。" = "An all-in-one Windows compatibility layer for Mac switchers. For a window-level app switcher, we recommend the free & open-source AltTab.";
+
+// MARK: 设置 - 功能
+"功能开关与快捷键（点击右侧按钮后直接按新组合键即可修改）" = "Features & Shortcuts (click a button on the right, then press a new combo)";
+"图片粘贴保存为 PNG" = "Save Clipboard Image as PNG";
+"新建文本文件　（菜单栏按钮 + Finder 服务菜单）" = "New Text File (menu bar button + Finder Services)";
+"快捷键全部恢复默认" = "Reset All Shortcuts";
+"保存位置" = "Save Location";
+"跟随鼠标点选位置（点了桌面就存桌面）" = "Follow Clicked Location (saves to Desktop when Desktop is focused)";
+"桌面" = "Desktop";
+"下载" = "Downloads";
+"保存后把新文件放入剪贴板（方便立即粘贴到别处）" = "Put Saved File on Clipboard (ready to paste elsewhere)";
+"保留最近 %lld 条" = "Keep Last %lld Items";
+"短信验证码" = "SMS Verification Codes";
+"收到验证码短信时自动复制到剪贴板" = "Auto-Copy Verification Codes to Clipboard";
+"完全磁盘访问：已授权" = "Full Disk Access: Granted";
+"完全磁盘访问：未授权" = "Full Disk Access: Not Granted";
+"去授权" = "Grant Access";
+"通过读取「信息」App 的本地短信数据库实现，需要完全磁盘访问权限；授权后重新打开本设置页生效。" = "Works by reading the Messages app's local database (Full Disk Access required). Reopen this page after granting.";
+
+// MARK: 设置 - 访达
+"访达按键（Windows 习惯）" = "Finder Keys (Windows-style)";
+"Windows 风格剪切粘贴　（⌘X 剪切、⌘V 移动）" = "Windows Cut & Paste (⌘X to cut, ⌘V to move)";
+"Delete (⌫) 返回上级目录" = "Delete (⌫) to Go Up";
+"fn+Delete 删除文件" = "fn+Delete to Delete Files";
+"⌘L 输入路径直达（地址栏）" = "⌘L Type a Path (address bar)";
+"⌥Enter 显示简介（Windows 的 Alt+Enter 属性）" = "⌥Enter Get Info (Windows Alt+Enter)";
+"访达增强（切换后自动重启访达生效）" = "Finder Tweaks (Finder restarts on change)";
+"路径栏（窗口底部显示完整路径）" = "Path Bar (full path at window bottom)";
+"状态栏（项目数量和剩余空间）" = "Status Bar (item count & free space)";
+"按名称排序时文件夹置顶" = "Keep Folders on Top When Sorting by Name";
+"搜索默认当前文件夹（而不是整台 Mac）" = "Search the Current Folder by Default (not This Mac)";
+"显示所有文件扩展名" = "Show All Filename Extensions";
+"清倒废纸篓不再确认" = "Don't Warn Before Emptying Trash";
+"修改扩展名不再警告" = "Don't Warn Before Changing Extensions";
+
+// MARK: 设置 - 键盘鼠标
+"键盘习惯" = "Keyboard Habits";
+"Home/End 跳到行首/行尾（而不是文档开头/结尾）" = "Home/End to Line Start/End (not document start/end)";
+"Ctrl 兼容　（Ctrl+C/V/X/Z/A/S 等按 Windows 习惯生效，终端除外）" = "Ctrl Compatibility (Ctrl+C/V/X/Z/A/S work as on Windows, except in Terminal)";
+"F1-F12 默认作为标准功能键（按 fn 才是亮度音量）" = "Use F1-F12 as Standard Function Keys (fn for brightness/volume)";
+"鼠标" = "Mouse";
+"鼠标滚轮方向按 Windows 习惯（触控板保持自然不受影响）" = "Windows Scroll Direction for Mouse (trackpad stays natural)";
+"关闭鼠标加速度（重新登录后完全生效）" = "Disable Mouse Acceleration (fully applies after re-login)";
+
+// MARK: 设置 - 窗口
+"窗口管理（Windows 习惯）" = "Window Management (Windows-style)";
+"⌃⌥←/→ 左右半屏、⌃⌥↑ 最大化、⌃⌥↓ 最小化" = "⌃⌥←/→ Snap Left/Right, ⌃⌥↑ Maximize, ⌃⌥↓ Minimize";
+"双击标题栏最小化（而不是缩放）" = "Double-Click Title Bar to Minimize (not zoom)";
+"说明" = "Note";
+"最大化是「填充当前屏幕」，不会进入 macOS 全屏空间。需要窗口级 ⌘Tab 切换器的话，推荐搭配免费开源的 AltTab。" = "Maximize fills the current screen without entering a macOS fullscreen space. For a window-level ⌘Tab switcher, we recommend the free & open-source AltTab.";
+
+// MARK: 快捷键录制
+"按下快捷键…" = "Press shortcut…";
+"已被占用" = "Already in use";
+
+// MARK: 剪贴板历史面板
+"暂无剪贴板记录\n复制任意内容后再按 ⌘⇧V" = "No clipboard items yet\nCopy something, then press ⌘⇧V";
+"%lld 条记录 · 点击复制到剪贴板" = "%lld items · click to copy";
+"清空" = "Clear";
+"图片" = "Image";
+"%@ · %lld 个字符" = "%@ · %lld characters";
+"%@ · %lld KB" = "%@ · %lld KB";
+"%@ · %lld 个项目" = "%@ · %lld items";
